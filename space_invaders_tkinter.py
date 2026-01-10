@@ -69,15 +69,104 @@ class Player:
         self.x = min(SCREEN_WIDTH - self.width, self.x + self.speed)
         
     def draw(self):
+        # Clean up old shapes
         if self.shape:
-            self.canvas.delete(self.shape)
-        # Draw a simple triangle ship
-        points = [
-            self.x + self.width // 2, self.y,
-            self.x, self.y + self.height,
-            self.x + self.width, self.y + self.height
+            if isinstance(self.shape, list):
+                for shape in self.shape:
+                    self.canvas.delete(shape)
+            else:
+                self.canvas.delete(self.shape)
+        
+        self.shape = []
+        center_x = self.x + self.width // 2
+        base_y = self.y + self.height
+        
+        # Draw realistic spaceship with multiple components
+        
+        # 1. Main body (fuselage) - sleek pointed design
+        body_points = [
+            center_x, self.y,  # Sharp nose tip
+            center_x - 7, self.y + 6,  # Top left curve
+            center_x - 5, self.y + 12,  # Mid body left
+            center_x - 4, self.y + 20,  # Lower body left
+            center_x - 3, base_y - 2,  # Near tail left
+            center_x - 2, base_y,  # Tail left
+            center_x + 2, base_y,  # Tail right
+            center_x + 3, base_y - 2,  # Near tail right
+            center_x + 4, self.y + 20,  # Lower body right
+            center_x + 5, self.y + 12,  # Mid body right
+            center_x + 7, self.y + 6,  # Top right curve
         ]
-        self.shape = self.canvas.create_polygon(points, fill=GREEN, outline=GREEN)
+        self.shape.append(self.canvas.create_polygon(body_points, fill=GREEN, outline=GREEN, width=1))
+        
+        # 2. Left wing - swept back design
+        left_wing_points = [
+            center_x - 5, self.y + 8,
+            self.x + 2, self.y + 14,
+            self.x, self.y + 22,
+            self.x + 3, self.y + 24,
+            center_x - 3, self.y + 20,
+        ]
+        self.shape.append(self.canvas.create_polygon(left_wing_points, fill=GREEN, outline=GREEN, width=1))
+        
+        # 3. Right wing - swept back design
+        right_wing_points = [
+            center_x + 5, self.y + 8,
+            self.x + self.width - 2, self.y + 14,
+            self.x + self.width, self.y + 22,
+            self.x + self.width - 3, self.y + 24,
+            center_x + 3, self.y + 20,
+        ]
+        self.shape.append(self.canvas.create_polygon(right_wing_points, fill=GREEN, outline=GREEN, width=1))
+        
+        # 4. Cockpit/canopy - streamlined bubble
+        cockpit_points = [
+            center_x - 2, self.y + 4,
+            center_x - 1, self.y + 10,
+            center_x + 1, self.y + 10,
+            center_x + 2, self.y + 4,
+        ]
+        self.shape.append(self.canvas.create_polygon(cockpit_points, fill=GREEN, outline=GREEN, width=1))
+        
+        # 5. Main engine exhaust at the back
+        self.shape.append(self.canvas.create_oval(
+            center_x - 4, base_y - 3,
+            center_x + 4, base_y + 1,
+            fill=GREEN, outline=GREEN
+        ))
+        
+        # 6. Wing-mounted thrusters/engines
+        # Left wing thruster
+        self.shape.append(self.canvas.create_oval(
+            self.x + 1, self.y + 20,
+            self.x + 5, self.y + 25,
+            fill=GREEN, outline=GREEN
+        ))
+        # Right wing thruster
+        self.shape.append(self.canvas.create_oval(
+            self.x + self.width - 5, self.y + 20,
+            self.x + self.width - 1, self.y + 25,
+            fill=GREEN, outline=GREEN
+        ))
+        
+        # 7. Wing tips - small details
+        self.shape.append(self.canvas.create_line(
+            self.x, self.y + 22,
+            self.x + 2, self.y + 23,
+            fill=GREEN, width=1
+        ))
+        self.shape.append(self.canvas.create_line(
+            self.x + self.width, self.y + 22,
+            self.x + self.width - 2, self.y + 23,
+            fill=GREEN, width=1
+        ))
+        
+        # 8. Nose detail - antenna/sensor
+        self.shape.append(self.canvas.create_line(
+            center_x, self.y,
+            center_x, self.y + 2,
+            fill=GREEN, width=2
+        ))
         
     def get_rect(self):
         return (self.x, self.y, self.x + self.width, self.y + self.height)
