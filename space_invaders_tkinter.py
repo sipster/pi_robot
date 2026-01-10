@@ -24,7 +24,7 @@ FRAME_DELAY = 1000 // FPS
 # Colors (vintage green-on-black aesthetic)
 BLACK = "#000000"
 GREEN = "#00FF00"
-WHITE = "#FFFFFF"
+WHITE = "#FFFFFF" 
 RED = "#FF0000"
 
 # Player settings
