@@ -35,6 +35,12 @@ Every time you make significant changes:
 # See what changed
 git status
 
+cd /Users/stchung/Downloads/Cursor
+git config user.name "stchung"
+git config user.email "stchung@localhost"
+git commit -m "Initial commit: Space Invaders game with sound effects"
+
+
 # Stage specific files
 git add space_invaders_tkinter.py
 
